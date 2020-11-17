@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Student.h"
 #include "GenQueue.h"
 #include "Window.h"
@@ -12,7 +13,11 @@ class Registrar{
   private:
     GenQueue<Student*>* Line;
     GenQueue<int>* waitTimes;
+    int* waitTimesArray;
+    int m_waitArraySize;
     GenQueue<int>* idleTimes;
+    int* idleTimesArray;
+    int m_idleArraySize;
     Window ** Windows;
     int m_numberOfWindows;
     int m_timeOfDay;
@@ -40,5 +45,13 @@ class Registrar{
     void printIdleTimes();
     bool timesMatch();
     void incrementAllWindows();
+
+    void setArrays();
+
+    void calcStats();
+    float calcMedian(int* arr, int size);
+    float calcMean(int* arr, int size);
+    int findLongestTime(int* arr, int size);
+    int calcOverMins(int* arr, int size, int min);
 };
 #endif

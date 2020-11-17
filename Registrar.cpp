@@ -20,6 +20,8 @@ Registrar::~Registrar(){
   delete Windows;
   delete Line;
   delete waitTimes;
+  delete waitTimesArray;
+  delete idleTimesArray;
 }
 void Registrar::printFields(){
   cout << "Number of Windows " << m_numberOfWindows << endl;
@@ -28,7 +30,6 @@ void Registrar::printFields(){
 }
 void Registrar::run(){
   while(!Line->isEmpty()){
-    cout << "TIME " << m_timeOfDay << endl;
     for(int i = 0; i < m_numberOfWindows; ++i){
       if(Windows[i]->isHelping()) Windows[i]->updateWindow();
     }
@@ -68,8 +69,8 @@ void Registrar::run(){
   for(int i = 0; i < m_numberOfWindows; ++i){
     idleTimes->insert(Windows[i]->getIdleTime());
   }
-  printWaitTimes();
-  printIdleTimes();
+  //setArrays();
+  calcStats();
 }
 void Registrar::printWaitTimes(){
   while(!waitTimes->isEmpty()){
@@ -96,4 +97,58 @@ void Registrar::incrementRemainingStudentsWait(){
 }
 void Registrar::incrementTimeOfDay(){
   m_timeOfDay++;
+}
+void Registrar::calcStats(){
+  int waitSize = waitTimes->getSize();
+  waitTimesArray = new int[waitSize];
+  for(int i = 0; i < waitSize; ++i){
+    waitTimesArray[i] = waitTimes->remove();
+  }
+  sort(waitTimesArray, waitTimesArray + waitSize);
+  int idleSize = idleTimes->getSize();
+  idleTimesArray = new int[idleSize];
+  for(int i = 0; i < idleSize; ++i){
+    idleTimesArray[i] = idleTimes->remove();
+  }
+  sort(idleTimesArray, idleTimesArray + idleSize);
+  cout << "The mean student wait time: " << calcMean(waitTimesArray, waitSize) << endl;
+  cout << "The median student wait time: " << calcMedian(waitTimesArray, waitSize) << endl;
+  cout << "The max student wait time: " << findLongestTime(waitTimesArray, waitSize) << endl;
+  cout << "The number of students who waited over 10 minutes: " << calcOverMins(waitTimesArray, waitSize, 10) << endl;
+  cout << "The mean window idle time: " << calcMean(idleTimesArray, idleSize) << endl;
+  cout << "The max window idle time: " << findLongestTime(idleTimesArray, idleSize) << endl;
+  cout << "The number of windows who were idled for more than 5 minutes: " << calcOverMins(idleTimesArray, idleSize, 5) << endl;
+}
+float Registrar::calcMedian(int* arr, int size){
+  sort(arr, arr + size);
+  if (size % 2 != 0) return (float)arr[size / 2];
+
+  return (float)(arr[(size - 1) / 2] + arr[size/ 2]) / 2.0;
+}
+float Registrar::calcMean(int* arr, int size){
+  float sum = 0;
+  float mean = 0;
+  int countOfWaited = 0;
+  for(int i = 0; i < size; ++i){
+    if(arr[i] != 0){
+      sum += arr[i];
+      countOfWaited++;
+    }
+  }
+  if(sum == 0) return 0;
+  return mean = sum / countOfWaited;
+}
+int Registrar::findLongestTime(int* arr, int size){
+  int max = 0;
+  for(int i = 0; i < size; ++i){
+    if(arr[i] > max) max = arr[i];
+  }
+  return max;
+}
+int Registrar::calcOverMins(int* arr, int size, int min){
+  int count = 0;
+  for(int i = 0; i < size; ++i){
+    if(arr[i] > min && arr[i] != 0) count++;
+  }
+  return count;
 }
