@@ -22,6 +22,7 @@ cpsc350-hw4: C++ Registrar DoublyLinkedList and Queue Assignment
   GenQueue.h
   GenDoublyLinkedList.h
   ListNode.h
+  List.h
   FileError.h
   FileError.cpp
   Makefile
@@ -31,6 +32,7 @@ cpsc350-hw4: C++ Registrar DoublyLinkedList and Queue Assignment
 4)
   References:
    - ZyBooks
+   - C++ simulate interfaces: https://stackoverflow.com/questions/1216750/how-can-i-simulate-interfaces-in-c
    - C++ implement Queue with Double Linked List: https://www.geeksforgeeks.org/implementation-deque-using-doubly-linked-list/
    - C++ calculate median: https://www.geeksforgeeks.org/median/
    - C++ template classes: https://www.geeksforgeeks.org/templates-cpp/ & https://www.tutorialspoint.com/cplusplus/cpp_templates.htm
