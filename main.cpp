@@ -1,9 +1,7 @@
 #include <iostream>
-#include "GenQueue.h"
 #include <string>
 #include "FileError.h"
 #include "Driver.h"
-#include "Student.h"
 using namespace std;
 
 int main(int argc, char ** argv){
