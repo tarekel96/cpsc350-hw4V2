@@ -2,6 +2,28 @@
 
 Registrar::Registrar(){}
 Registrar::Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>* studentTimesNeeded){
+  m_outputFile = "";
+  m_outToFile = false;
+  /* init Queues */
+  waitTimes = new GenQueue<int>();
+  idleTimes = new GenQueue<int>();
+  m_numberOfWindows = numberOfWindows;
+  /* populate Windows double pointer array */
+  Windows = new Window*[m_numberOfWindows];
+  for(int i = 0; i < m_numberOfWindows; ++i){
+    Windows[i] = new Window(timeOfDay);
+  }
+  m_timeOfDay = timeOfDay;
+  /* init Student Queue */
+  Line = new GenQueue<Student*>();
+  /* populate Student Queue - order matters */
+  while(!studentTimesNeeded->isEmpty()){
+    Line->insert(new Student(m_timeOfDay, studentTimesNeeded->remove()));
+  }
+}
+Registrar::Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>* studentTimesNeeded, string outputFile){
+  m_outputFile = outputFile;
+  m_outToFile = true;
   /* init Queues */
   waitTimes = new GenQueue<int>();
   idleTimes = new GenQueue<int>();
@@ -100,13 +122,29 @@ void Registrar::calcStats(){
     idleTimesArray[i] = idleTimes->remove();
   }
   sort(idleTimesArray, idleTimesArray + idleSize);
-  cout << "The mean student wait time: " << calcMean(waitTimesArray, waitSize) << endl;
-  cout << "The median student wait time: " << calcMedian(waitTimesArray, waitSize) << endl;
-  cout << "The max student wait time: " << findLongestTime(waitTimesArray, waitSize) << endl;
-  cout << "The number of students who waited over 10 minutes: " << calcOverMins(waitTimesArray, waitSize, 10) << endl;
-  cout << "The mean window idle time: " << calcMean(idleTimesArray, idleSize) << endl;
-  cout << "The max window idle time: " << findLongestTime(idleTimesArray, idleSize) << endl;
-  cout << "The number of windows who were idled for more than 5 minutes: " << calcOverMins(idleTimesArray, idleSize, 5) << endl;
+  /* OUTPUT TO CONSOLE */
+  if(m_outToFile == false){
+    cout << "The mean student wait time: " << calcMean(waitTimesArray, waitSize) << endl;
+    cout << "The median student wait time: " << calcMedian(waitTimesArray, waitSize) << endl;
+    cout << "The max student wait time: " << findLongestTime(waitTimesArray, waitSize) << endl;
+    cout << "The number of students who waited over 10 minutes: " << calcOverMins(waitTimesArray, waitSize, 10) << endl;
+    cout << "The mean window idle time: " << calcMean(idleTimesArray, idleSize) << endl;
+    cout << "The max window idle time: " << findLongestTime(idleTimesArray, idleSize) << endl;
+    cout << "The number of windows who were idled for more than 5 minutes: " << calcOverMins(idleTimesArray, idleSize, 5) << endl;
+  }
+  /* OUTPUT TO ANOTHER FILE */
+  else{
+    outFile.open(m_outputFile);
+    outFile << "The mean student wait time: " << calcMean(waitTimesArray, waitSize) << endl;
+    outFile << "The median student wait time: " << calcMedian(waitTimesArray, waitSize) << endl;
+    outFile << "The max student wait time: " << findLongestTime(waitTimesArray, waitSize) << endl;
+    outFile << "The number of students who waited over 10 minutes: " << calcOverMins(waitTimesArray, waitSize, 10) << endl;
+    outFile << "The mean window idle time: " << calcMean(idleTimesArray, idleSize) << endl;
+    outFile << "The max window idle time: " << findLongestTime(idleTimesArray, idleSize) << endl;
+    outFile << "The number of windows who were idled for more than 5 minutes: " << calcOverMins(idleTimesArray, idleSize, 5) << endl;
+    outFile.close();
+    cout << "Please refer to " << m_outputFile << " for the results." << endl;
+  }
 }
 /*
   * @name calcMedian - calculates median, got help from GeekForGeeks

@@ -18,6 +18,8 @@ class Driver{
     int m_numberOfOpenWindows; /* the number of windows the Registrar Office has */
     int m_startTime; /* initial time of day - when first student arrives */
     int m_numberOfStudents; /* the number of students arriving to the registrar office */
+    int m_choice; /* user choice - console or output to another file */
+    string m_outputFile; /* name of output file */
   public:
     Driver(); /* Default Constructor */
     /*
@@ -32,5 +34,8 @@ class Driver{
     void processFile(); /* reads through file and gets information */
     /* PRINT FUNCTION */
     void printFields();
+    /* HELPER FUNCTIONS - prompt for user inputs */
+    int getChoice();
+    string getOutputFileName();
 };
 #endif

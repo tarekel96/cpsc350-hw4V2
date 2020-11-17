@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <fstream>
 #include "Student.h"
 #include "GenQueue.h"
 #include "Window.h"
@@ -22,7 +23,9 @@ class Registrar{
     int m_numberOfWindows; /* number of Windows at the Registrar Office */
     int m_timeOfDay; /* current time of the day */
     int m_timeUntilFirstStudent; /* the time before first student arrives */
-
+    string m_outputFile; /* name of output file */
+    ofstream outFile; /* object that writes to output file */
+    bool m_outToFile; /* whether or not to output to another file */
   public:
     Registrar(); /* Default Constructor */
     /*
@@ -32,6 +35,7 @@ class Registrar{
       * @param studentTimesNeeded - Queue of student times needed at window
     */
     Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>*studentTimesNeeded);
+    Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>*studentTimesNeeded, string outputFile);
     ~Registrar(); /* Destructor */
 
 
