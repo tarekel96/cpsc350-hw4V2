@@ -3,7 +3,6 @@
 /*
   * @name GenDoublyLinkedList - represents a DoublyLinkedList that is defined with template classes
   * @author Tarek El-Hajjaoui
-  * @version 1.0
 */
 #include <iostream>
 #include "ListNode.h"
@@ -20,9 +19,11 @@ class GenDoublyLinkedList {
         GenDoublyLinkedList(); /* Default Constructor */
         ~GenDoublyLinkedList(); /* Destructor */
 
+        /* AUXILIARY FUNCTIONS */
         unsigned int getSize(); /* the number of Nodes in the List */
         bool isEmpty(); /* whether or not the list is empty */
 
+        /* CORE FUNCTIONS */
         void insertFront(T d); /* inserts a new Node at the front of the list */
         T getFront(); /* returns the front node of the List, but does not remove it */
         T removeFront(); /* removes the front node of the List and returns it */
@@ -31,12 +32,10 @@ class GenDoublyLinkedList {
         T removeBack(); /* removes the back node of the List and returns it */
         int find(T d); /* searches for the first instance of specified object and returns position number */
         T deletePos(int pos); /* removes and returns the node at the given position */
-
         T removeNode(T key); /* removes the first object in List that is the same as parameter */
-        
-        void printList(); /* prints list */
 
-        void sort(); /* Sorting algorithm for sorting in ascending order - for number types only */
+        void printList(); /* prints contents of the list - array format */
+
 };
 
 template<class T>
@@ -170,23 +169,23 @@ T GenDoublyLinkedList<T>::deletePos(int pos){
     else if(pos == size-1) return removeBack();
     else if(pos >=size || pos < 0) runtime_error("ERROR: INDEX IS OUT OF BOUNDS. CANNOT GETPOS\n");
 
-    ListNode<T> *atPos = front;
-    ListNode<T> *beforePos;
-    ListNode<T> *afterPos;
+    ListNode<T>* curr = front; /* iterating node */
+    ListNode<T>* prev; /* node before iterating node */
+    ListNode<T>* next; /* node after iterating node */
 
     for(int i = 0; i < pos; i++){
-        atPos = atPos->next;
-        beforePos = atPos->prev;
-        afterPos = atPos->next;
+        curr = curr->next; /* update current node */
+        prev = curr->prev; /* update prev node */
+        next = curr->next; /* update next node */
     }
 
-    beforePos->next = afterPos;
-    afterPos->prev = beforePos;
+    prev->next = next; /* update prev node next pointer */
+    next->prev = prev; /* update next node prev pointer */
 
-    T temp = atPos->data;
-    atPos->next = NULL;
-    atPos->prev = NULL;
-    delete atPos;
+    T temp = curr->data;
+    curr->next = NULL;
+    curr->prev = NULL;
+    delete curr;
 
     size--;
 
@@ -195,7 +194,8 @@ T GenDoublyLinkedList<T>::deletePos(int pos){
 }
 template<class T>
 T GenDoublyLinkedList<T>::removeNode(T key){
-  // make sure the list is not empty TODO
+  /* make sure the list is not empty */
+  if(isEmpty()) runtime_error("ERROR: LIST IS EMPTY. CANNOT REMOVENODE\n");
   ListNode<T>* curr = front;
   while(curr->data != key){
     curr = curr->next;
@@ -203,17 +203,19 @@ T GenDoublyLinkedList<T>::removeNode(T key){
       return -1;
     }
   }
-  // we found the value, now lets delete it 3 scenarios - front, middle, back
+  /* 3 scenarios - front, middle, back */
+  /* front */
   if(curr == front){
     front = curr->next;
     front->prev = NULL;
   }
+  /* back */
   else if(curr == back){
     back = curr->prev;
     back->next = NULL;
   }
   else {
-    // it is not the front or the back, somewhere in the middle
+    /* middle */
     curr->next->prev = curr->prev;
     curr->prev->next = curr->next;
   }
@@ -236,13 +238,4 @@ void GenDoublyLinkedList<T>::printList(){
     }
     cout << endl;
 }
-
-template<class T>
-void GenDoublyLinkedList<T>::sort(){
-    bool swap;
-    /* bubble sort algorithm */
-}
-
-
-
-#endif //GENODOUBLE_LINKED_LIST_H
+#endif

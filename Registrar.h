@@ -1,57 +1,64 @@
 #ifndef REGISTRAR_H
 #define REGISTRAR_H
+/*
+  * @name Registrar - represents the Registrar Office
+  * @author Tarek El-Hajjaoui
+*/
 #include <iostream>
 #include <string>
-#include <vector>
 #include <algorithm>
 #include "Student.h"
 #include "GenQueue.h"
 #include "Window.h"
-
 using namespace std;
 class Registrar{
   private:
-    GenQueue<Student*>* Line;
-    GenQueue<int>* waitTimes;
-    int* waitTimesArray;
-    int m_waitArraySize;
-    GenQueue<int>* idleTimes;
-    int* idleTimesArray;
-    int m_idleArraySize;
-    Window ** Windows;
-    int m_numberOfWindows;
-    int m_timeOfDay;
-    int m_timeUntilFirstStudent;
+    GenQueue<Student*>* Line; /* Queue of Students that represents Registrar Line */
+    GenQueue<int>* waitTimes; /* Queue of Student wait times */
+    int* waitTimesArray; /* pointer array of Student wait times */
+    GenQueue<int>* idleTimes; /* Queue of Window idle times */
+    int* idleTimesArray; /* pointer array of Window idle times */
+    Window ** Windows; /* pointer array of Window pointers - represents the Windows at the Registrar Office */
+    int m_numberOfWindows; /* number of Windows at the Registrar Office */
+    int m_timeOfDay; /* current time of the day */
+    int m_timeUntilFirstStudent; /* the time before first student arrives */
 
   public:
-    Registrar();
+    Registrar(); /* Default Constructor */
+    /*
+      * Overloaded Constructor
+      * @param numberOfWindows - the number of windows at Registrar Office
+      * @param timeOfDay - the start time of the day
+      * @param studentTimesNeeded - Queue of student times needed at window
+    */
     Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>*studentTimesNeeded);
-    ~Registrar();
+    ~Registrar(); /* Destructor */
 
+
+    // int getNumberOfWindows();
+    // int getNumOfWindows();
+    /* ACCESSORS */
+
+    /* MUTATORS */
     void setNumberOfWindows(int numberOfWindows);
-    int getNumberOfWindows();
-    void step();
-    void addStudent(Student* S);
-    bool studentsInLine();
-    bool studentsAtWindow();
-    Window** getWindows();
-    int getNumOfWindows();
+    void addStudent(Student* S); /* adds a student to the Line Queue */
 
-    void run();
-    void incrementTimeOfDay();
-    void incrementRemainingStudentsWait();
-    void printWaitTimes();
-    void printFields();
-    void printIdleTimes();
-    bool timesMatch();
-    void incrementAllWindows();
+    void incrementTimeOfDay(); /* increments m_timeOfDay field */
+    void incrementRemainingStudentsWait(); /* finds remaining students in line and increments their wait times */
 
-    void setArrays();
-
-    void calcStats();
+    /* STATISTICS FUNCTIONS */
+    void calcStats(); /* calculates all of the stats and displays them out to the console */
     float calcMedian(int* arr, int size);
     float calcMean(int* arr, int size);
     int findLongestTime(int* arr, int size);
     int calcOverMins(int* arr, int size, int min);
+
+    /* main method for operating the class */
+    void run();
+
+    /* PRINT FUNCTIONS */
+    void printFields();
+    void printWaitTimes();
+    void printIdleTimes();
 };
 #endif

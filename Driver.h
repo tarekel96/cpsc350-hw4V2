@@ -1,31 +1,36 @@
 #ifndef DRIVER_H
 #define DRIVER_H
+/*
+  * @name Driver - class responsible for running the program simulation
+  * @author Tarek El-Hajjaoui
+*/
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 #include "Registrar.h"
-
 using namespace std;
 class Driver{
   private:
-    Registrar* RegistrarOffice;
-    GenQueue<int>* studentTimesNeeded;
-    string m_file;
-    ifstream inFile;
-    int m_numberOfOpenWindows;
-    int m_startTime;
-    int m_numberOfStudents;
-    //vector<int> studentTimesNeeded;
-
-
+    Registrar* RegistrarOffice; /* instance of Registrar that represents the Registrar Office */
+    GenQueue<int>* studentTimesNeeded; /* Queue of student times needed - populated from input file */
+    string m_file; /* input file from user */
+    ifstream inFile; /* used to open and read through m_file */
+    int m_numberOfOpenWindows; /* the number of windows the Registrar Office has */
+    int m_startTime; /* initial time of day - when first student arrives */
+    int m_numberOfStudents; /* the number of students arriving to the registrar office */
   public:
-    Driver();
+    Driver(); /* Default Constructor */
+    /*
+      * Overloaded Constructor - takes in an input file
+      * @param file - name of input file
+    */
     Driver(string file);
-    ~Driver();
+    ~Driver(); /* Destructor */
 
+    /* MUTATOR */
     void setFile(string file);
-    void processFile();
+    void processFile(); /* reads through file and gets information */
+    /* PRINT FUNCTION */
     void printFields();
 };
 #endif

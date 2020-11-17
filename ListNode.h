@@ -3,7 +3,6 @@
 /*
   * @name ListNode - represents a Doubly Linked List Node
   * @author Tarek El-Hajjaoui
-  * @version 1.0
 */
 template<class T>
 class ListNode{

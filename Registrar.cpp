@@ -2,16 +2,19 @@
 
 Registrar::Registrar(){}
 Registrar::Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>* studentTimesNeeded){
+  /* init Queues */
   waitTimes = new GenQueue<int>();
   idleTimes = new GenQueue<int>();
   m_numberOfWindows = numberOfWindows;
+  /* populate Windows double pointer array */
   Windows = new Window*[m_numberOfWindows];
   for(int i = 0; i < m_numberOfWindows; ++i){
-    // Windows[i] = new Window();
     Windows[i] = new Window(timeOfDay);
   }
   m_timeOfDay = timeOfDay;
+  /* init Student Queue */
   Line = new GenQueue<Student*>();
+  /* populate Student Queue - order matters */
   while(!studentTimesNeeded->isEmpty()){
     Line->insert(new Student(m_timeOfDay, studentTimesNeeded->remove()));
   }
@@ -23,11 +26,7 @@ Registrar::~Registrar(){
   delete waitTimesArray;
   delete idleTimesArray;
 }
-void Registrar::printFields(){
-  cout << "Number of Windows " << m_numberOfWindows << endl;
-  cout << "Time of day: " << m_timeOfDay << endl;
-  cout << "Number of students: " << Line->getSize() << endl;
-}
+/* main method for operating the class */
 void Registrar::run(){
   while(!Line->isEmpty()){
     for(int i = 0; i < m_numberOfWindows; ++i){
@@ -36,21 +35,21 @@ void Registrar::run(){
 
     bool allWindowsAreFull = true;
     int temp;
-    // iterate through Windows pointer array
+    /* iterate through Windows double pointer array */
     for(int i = 0; i < m_numberOfWindows; ++i){
-      // if there is an available window - help next student
+      /* if there is an available window - help next student */
       if(Windows[i]->isHelping() == false && !Line->isEmpty()){
         allWindowsAreFull = false;
-        // insert wait time to waitTime Queue before removing student from line Queue
+        /* insert wait time to waitTime Queue before removing student from line Queue */
         waitTimes->insert(Line->peek()->getTimeWaited(m_timeOfDay));
-        //cout << "wait time " << Line->peek()->getTimeWaited(m_timeOfDay) << endl;
         if(Line->getSize() == 1){
+          /* use peek here to not remove the next student in Line */
           temp = Line->peek()->getTimeNeeded();
         }
         Windows[i]->helpStudent(Line->remove());
       }
     }
-    // not all of the windows are full - increment each of those Window's idle time
+    /* not all of the windows are full - increment each of those Window's idle time */
     if(allWindowsAreFull == false){
       for(int i = 0; i < m_numberOfWindows; ++i){
         if(Windows[i]->isHelping() == false){
@@ -58,33 +57,23 @@ void Registrar::run(){
             Windows[i]->addToIdleTime(temp);
           }
           else {
-            // increments time idling
+            /* increments time idling */
             Windows[i]->updateWindow();
           }
         }
       }
     }
+    /* increment time of day for each iteriation */
     incrementTimeOfDay();
   }
   for(int i = 0; i < m_numberOfWindows; ++i){
     idleTimes->insert(Windows[i]->getIdleTime());
   }
-  //setArrays();
+  /* calculate and display all stats at the end */
   calcStats();
 }
-void Registrar::printWaitTimes(){
-  while(!waitTimes->isEmpty()){
-    cout << waitTimes->remove() << " ";
-  }
-  cout << endl;
-}
-void Registrar::printIdleTimes(){
-  while(!idleTimes->isEmpty()){
-    cout << idleTimes->remove() << " ";
-  }
-  cout << endl;
-}
 void Registrar::incrementRemainingStudentsWait(){
+  /* temporarily holds new Line Queue */
   GenQueue<Student*>* tempQ;
   tempQ = new GenQueue<Student*>();
   while(!Line->isEmpty()){
@@ -119,12 +108,22 @@ void Registrar::calcStats(){
   cout << "The max window idle time: " << findLongestTime(idleTimesArray, idleSize) << endl;
   cout << "The number of windows who were idled for more than 5 minutes: " << calcOverMins(idleTimesArray, idleSize, 5) << endl;
 }
+/*
+  * @name calcMedian - calculates median, got help from GeekForGeeks
+  * @param arr - pointer array
+  * @param size - size of poiner array
+*/
 float Registrar::calcMedian(int* arr, int size){
   sort(arr, arr + size);
   if (size % 2 != 0) return (float)arr[size / 2];
 
   return (float)(arr[(size - 1) / 2] + arr[size/ 2]) / 2.0;
 }
+/*
+  * @name calcMean - calculates mean
+  * @param arr - pointer array
+  * @param size - size of poiner array
+*/
 float Registrar::calcMean(int* arr, int size){
   float sum = 0;
   float mean = 0;
@@ -138,6 +137,11 @@ float Registrar::calcMean(int* arr, int size){
   if(sum == 0) return 0;
   return mean = sum / countOfWaited;
 }
+/*
+  * @name findLongestTime - determines which time in arr is longest
+  * @param arr - pointer array
+  * @param size - size of poiner array
+*/
 int Registrar::findLongestTime(int* arr, int size){
   int max = 0;
   for(int i = 0; i < size; ++i){
@@ -145,10 +149,33 @@ int Registrar::findLongestTime(int* arr, int size){
   }
   return max;
 }
+/*
+  * @name calcOverMins - counts number of elements in arr that are greater than min
+  * @param arr - pointer array
+  * @param size - size of poiner array
+  * @param min - cutoff value to compare against
+*/
 int Registrar::calcOverMins(int* arr, int size, int min){
   int count = 0;
   for(int i = 0; i < size; ++i){
     if(arr[i] > min && arr[i] != 0) count++;
   }
   return count;
+}
+void Registrar::printFields(){
+  cout << "Number of Windows " << m_numberOfWindows << endl;
+  cout << "Time of day: " << m_timeOfDay << endl;
+  cout << "Number of students: " << Line->getSize() << endl;
+}
+void Registrar::printWaitTimes(){
+  while(!waitTimes->isEmpty()){
+    cout << waitTimes->remove() << " ";
+  }
+  cout << endl;
+}
+void Registrar::printIdleTimes(){
+  while(!idleTimes->isEmpty()){
+    cout << idleTimes->remove() << " ";
+  }
+  cout << endl;
 }

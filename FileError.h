@@ -1,10 +1,9 @@
+#ifndef FILERROR_H
+#define FILERROR_H
 /**
   * a class that opens a file to check if there are any errors in the process
   * @author Tarek El-Hajjaoui
-  * @version 1.0
 */
-#ifndef FILERROR_H
-#define FILERROR_H
 #include <iostream>
 #include <fstream>
 using namespace std;

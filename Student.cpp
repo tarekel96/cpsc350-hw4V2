@@ -52,5 +52,24 @@ void Student::incrementWait(){
 }
 void Student::calculateWaitTime(int timeLeft){
   m_timeLeft = timeLeft;
-  setTimeWaited(abs(m_timeLeft - m_timeEntered));
+  setTimeWaited(abs(m_timeLeft - m_timeEntered)); /* abs ensures no negative times */
+}
+string Student::toString(){
+  string ret = "";
+  ret += "Time Entered: ";
+  ret += to_string(getTimeEntered());
+  ret += " \n";
+  ret += "Time Left: ";
+  ret += to_string(m_timeLeft);
+  ret += " \n";
+  ret += "Time Needed: ";
+  ret += to_string(getTimeNeeded());
+  ret += " \n";
+  ret += "Time Waited: ";
+  ret += to_string(getTimeWaited());
+  ret += " \n";
+  ret += "Is Waiting: ";
+  ret += to_string(isWaiting());
+  ret += " \n";
+  return ret;
 }

@@ -3,11 +3,10 @@
 Driver::Driver(){}
 Driver::Driver(string file){
   setFile(file);
-  studentTimesNeeded = new GenQueue<int>();
-  processFile();
+  studentTimesNeeded = new GenQueue<int>(); /* init studentTimesNeeded Queue */
+  processFile();  /* get info from file */
   RegistrarOffice = new Registrar(m_numberOfOpenWindows, m_startTime, studentTimesNeeded);
-  //RegistrarOffice->printFields();
-  RegistrarOffice->run();
+  RegistrarOffice->run(); /* simulate program */
 }
 Driver::~Driver(){
   if(studentTimesNeeded != NULL) delete studentTimesNeeded;
@@ -21,13 +20,10 @@ void Driver::processFile(){
   string currentLine;
   int counter = 0;
   while(getline(inFile, currentLine)){
-    if(counter == 0) m_numberOfOpenWindows = stoi(currentLine);
-    else if(counter == 1) m_startTime = stoi(currentLine);
-    else if(counter == 2) m_numberOfStudents = stoi(currentLine);
-    else{
-      //studentTimesNeeded.push_back(stoi(currentLine));
-      studentTimesNeeded->insert(stoi(currentLine));
-    }
+    if(counter == 0) m_numberOfOpenWindows = stoi(currentLine); /* first - number of windows */
+    else if(counter == 1) m_startTime = stoi(currentLine);  /* second - time first student arrives */
+    else if(counter == 2) m_numberOfStudents = stoi(currentLine); /* third - number of students that arrive */
+    else studentTimesNeeded->insert(stoi(currentLine)); /* rest - time student needs at window */
     counter++;
   }
 }
