@@ -41,5 +41,6 @@ cpsc350-hw4: C++ Registrar DoublyLinkedList and Queue Assignment
 5)
   Instructions to run assignment:
    1) Compile with: g++ *.cpp or run make
-   2) Run a.out followed by the name of the input file: ./a.out fileName
+   2) Run a.out followed by the name of the input file: ./a.out fileName (or without)
    3) Follow the instructions of the program that are prompted on the console.
+   **NOTE: I added an extra functionality of giving the user the option of getting the results to a file instead of the console.
