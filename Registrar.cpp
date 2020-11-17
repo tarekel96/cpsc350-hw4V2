@@ -27,6 +27,11 @@ void Registrar::printFields(){
 }
 void Registrar::run(){
   while(!Line->isEmpty()){
+    cout << "Time Of Day: " << m_timeOfDay << endl;
+    for(int i = 0; i < m_numberOfWindows; ++i){
+      if(Windows[i]->isHelping()) Windows[i]->updateWindow();
+    }
+
     bool allWindowsAreFull = true;
     // iterate through Windows pointer array
     for(int i = 0; i < m_numberOfWindows; ++i){
@@ -35,24 +40,12 @@ void Registrar::run(){
         allWindowsAreFull = false;
         // insert wait time to waitTime Queue before removing student from line Queue
         waitTimes->insert(Line->peek()->getTimeWaited(m_timeOfDay));
-      //  cout << "Before remove Size: " << Line->getSize() << endl;
+        //cout << "wait time " << Line->peek()->getTimeWaited(m_timeOfDay) << endl;
         Windows[i]->helpStudent(Line->remove());
-      //  cout << "Removed from Line...new Size: " << Line->getSize() << endl;
-      }
-      // no available windows
-      else {
-        // decrements Time Remaining of helping student
-      //  cout << "Decrement time remaining " << endl;
-        Windows[i]->updateWindow();
       }
     }
-    // all the windows are full and there are still students in line
-    // if(allWindowsAreFull && !Line->isEmpty()){
-    //   incrementRemainingStudentsWait();
-    // }
     // not all of the windows are full - increment each of those Window's idle time
     if(allWindowsAreFull == false){
-    //  cout << "Increment idle time " << endl;
       for(int i = 0; i < m_numberOfWindows; ++i){
         if(Windows[i]->isHelping() == false){
           // increments time idling
@@ -60,10 +53,8 @@ void Registrar::run(){
         }
       }
     }
-  //  cout << "while" << endl;
-    m_timeOfDay++;
+    incrementTimeOfDay();
   }
-//  cout << "here" << endl;
   printWaitTimes();
 }
 void Registrar::printWaitTimes(){
@@ -76,11 +67,13 @@ void Registrar::incrementRemainingStudentsWait(){
   GenQueue<Student*>* tempQ;
   tempQ = new GenQueue<Student*>();
   while(!Line->isEmpty()){
-  //  cout << "while 2" << endl;
     Student* tempStudent = Line->remove();
     tempStudent->incrementWait();
     tempQ->insert(tempStudent);
   }
   Line = tempQ;
   delete tempQ;
+}
+void Registrar::incrementTimeOfDay(){
+  m_timeOfDay++;
 }

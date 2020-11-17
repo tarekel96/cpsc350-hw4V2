@@ -32,6 +32,7 @@ class Registrar{
     int getNumOfWindows();
 
     void run();
+    void incrementTimeOfDay();
     void incrementRemainingStudentsWait();
     void printWaitTimes();
     void printFields();

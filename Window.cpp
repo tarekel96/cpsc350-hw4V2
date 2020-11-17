@@ -28,7 +28,6 @@ void Window::incrementIdleTime(){
   m_idleTime++;
 }
 void Window::decrementTimeRemaining(){
-  //cout << "inside decrementTimeRemaining " << endl;
   --m_timeRemaining;
   if(m_timeRemaining == 0) setHelping(false);
 }

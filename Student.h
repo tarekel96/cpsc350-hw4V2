@@ -2,6 +2,7 @@
 #define STUDENT_H
 #include <iostream>
 #include <string>
+#include <cmath>
 using namespace std;
 class Student{
   private:
