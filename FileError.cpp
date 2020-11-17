@@ -27,7 +27,7 @@ void FileError::setFile(string file){
 /* prompt the user for name of the file to check */
 string FileError::getFile(){
   string file;
-  cout << "Enter the name of the File: " << endl;
+  cout << "PLEASE ENTER THE NAME OF THE FILE: " << endl;
   cin >> file;
   return file;
 };
@@ -35,7 +35,7 @@ string FileError::getFile(){
 int FileError::checkFile(){
   m_inFile.open(m_file);
   if(m_inFile.fail()){
-    cerr << "Error in opening file.\nPlease make sure your file input is correct." << endl;
+    cerr << "ERROR IN OPENING THE FILE.\nPLEASE MAKE SURE YOUR FILE INPUT IS CORRECT." << endl;
     return -1;
   }
   else {
