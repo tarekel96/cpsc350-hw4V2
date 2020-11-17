@@ -1,16 +1,20 @@
 #include "Student.h"
 
 Student::Student(){
+  m_timeEntered = 0;
+  m_timeLeft = 0;
   m_timeNeeded = 1;
   m_timeWaited = 0;
   m_isWaiting = false;
 }
-Student::Student(int timeNeeded){
+Student::Student(int timeEntered, int timeNeeded){
+  m_timeEntered = timeEntered;
   m_timeNeeded = timeNeeded;
   m_timeWaited = 0;
   m_isWaiting = false;
 }
 Student::Student(Student& S){
+  m_timeEntered = S.m_timeEntered;
   m_timeNeeded = S.m_timeNeeded;
   m_timeWaited = S.m_timeWaited;
   m_isWaiting = S.m_isWaiting;
@@ -26,7 +30,10 @@ int Student::getTimeNeeded(){
 int Student::getTimeWaited(){
   return m_timeWaited;
 }
-
+int Student::getTimeWaited(int timeLeft){
+  calculateWaitTime(timeLeft);
+  return m_timeWaited;
+}
 void Student::setNeeded(int timeNeeded){
   m_timeNeeded = timeNeeded;
 }
@@ -39,4 +46,8 @@ void Student::setTimeWaited(int timeWaited){
 
 void Student::incrementWait(){
   m_timeWaited++;
+}
+void Student::calculateWaitTime(int timeLeft){
+  m_timeLeft = timeLeft;
+  setTimeWaited(m_timeLeft - m_timeEntered);
 }

@@ -12,7 +12,7 @@ Registrar::Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>* studentT
   m_timeOfDay = timeOfDay;
   Line = new GenQueue<Student*>();
   while(!studentTimesNeeded->isEmpty()){
-    Line->insert(new Student(studentTimesNeeded->remove()));
+    Line->insert(new Student(m_timeOfDay, studentTimesNeeded->remove()));
   }
 }
 Registrar::~Registrar(){
@@ -27,33 +27,32 @@ void Registrar::printFields(){
 }
 void Registrar::run(){
   while(!Line->isEmpty()){
-    m_timeOfDay++;
     bool allWindowsAreFull = true;
     // iterate through Windows pointer array
     for(int i = 0; i < m_numberOfWindows; ++i){
       // if there is an available window - help next student
-      if(Windows[i]->isHelping() == false){
+      if(Windows[i]->isHelping() == false && !Line->isEmpty()){
         allWindowsAreFull = false;
         // insert wait time to waitTime Queue before removing student from line Queue
-        waitTimes->insert(Line->peek()->getTimeWaited());
-        cout << "Before remove Size: " << Line->getSize() << endl;
+        waitTimes->insert(Line->peek()->getTimeWaited(m_timeOfDay));
+      //  cout << "Before remove Size: " << Line->getSize() << endl;
         Windows[i]->helpStudent(Line->remove());
-        cout << "Removed from Line...new Size: " << Line->getSize() << endl;
+      //  cout << "Removed from Line...new Size: " << Line->getSize() << endl;
       }
       // no available windows
       else {
         // decrements Time Remaining of helping student
-        cout << "Decrement time remaining " << endl;
+      //  cout << "Decrement time remaining " << endl;
         Windows[i]->updateWindow();
       }
     }
     // all the windows are full and there are still students in line
-    if(allWindowsAreFull && !Line->isEmpty()){
-      incrementRemainingStudentsWait();
-    }
+    // if(allWindowsAreFull && !Line->isEmpty()){
+    //   incrementRemainingStudentsWait();
+    // }
     // not all of the windows are full - increment each of those Window's idle time
-    else if(allWindowsAreFull == false){
-      cout << "Increment idle time " << endl;
+    if(allWindowsAreFull == false){
+    //  cout << "Increment idle time " << endl;
       for(int i = 0; i < m_numberOfWindows; ++i){
         if(Windows[i]->isHelping() == false){
           // increments time idling
@@ -61,10 +60,11 @@ void Registrar::run(){
         }
       }
     }
-    cout << "while" << endl;
+  //  cout << "while" << endl;
+    m_timeOfDay++;
   }
-  cout << "here" << endl;
-  //printWaitTimes();
+//  cout << "here" << endl;
+  printWaitTimes();
 }
 void Registrar::printWaitTimes(){
   while(!waitTimes->isEmpty()){
@@ -76,7 +76,7 @@ void Registrar::incrementRemainingStudentsWait(){
   GenQueue<Student*>* tempQ;
   tempQ = new GenQueue<Student*>();
   while(!Line->isEmpty()){
-    cout << "while 2" << endl;
+  //  cout << "while 2" << endl;
     Student* tempStudent = Line->remove();
     tempStudent->incrementWait();
     tempQ->insert(tempStudent);
