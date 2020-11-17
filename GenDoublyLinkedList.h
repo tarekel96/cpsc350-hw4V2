@@ -4,12 +4,13 @@
   * @name GenDoublyLinkedList - represents a DoublyLinkedList that is defined with template classes
   * @author Tarek El-Hajjaoui
 */
+#include "List.h"
 #include <iostream>
 #include "ListNode.h"
 using namespace std;
 
 template<class T>
-class GenDoublyLinkedList {
+class GenDoublyLinkedList: public List<T> {
     private:
         ListNode<T> *front;  /* Front of the List */
         ListNode<T> *back;  /* Back of the List */
