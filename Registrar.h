@@ -16,6 +16,7 @@ class Registrar{
     Window ** Windows;
     int m_numberOfWindows;
     int m_timeOfDay;
+    int m_timeUntilFirstStudent;
 
   public:
     Registrar();
@@ -36,5 +37,8 @@ class Registrar{
     void incrementRemainingStudentsWait();
     void printWaitTimes();
     void printFields();
+    void printIdleTimes();
+    bool timesMatch();
+    void incrementAllWindows();
 };
 #endif

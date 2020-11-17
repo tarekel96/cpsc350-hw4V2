@@ -34,6 +34,9 @@ int Student::getTimeWaited(int timeLeft){
   calculateWaitTime(timeLeft);
   return m_timeWaited;
 }
+int Student::getTimeEntered(){
+  return m_timeEntered;
+}
 void Student::setNeeded(int timeNeeded){
   m_timeNeeded = timeNeeded;
 }
@@ -48,10 +51,6 @@ void Student::incrementWait(){
   m_timeWaited++;
 }
 void Student::calculateWaitTime(int timeLeft){
-  cout << "calulating wait time..." << endl;
-  cout << "Time Enter: " << m_timeEntered << endl;
-  cout << "Time Left: " << timeLeft << endl;
-  cout << "WAIT TIME: " << abs(timeLeft - m_timeEntered) << endl;
   m_timeLeft = timeLeft;
   setTimeWaited(abs(m_timeLeft - m_timeEntered));
 }

@@ -6,6 +6,12 @@ Window::Window(){
   m_idleTime = 0;
   m_timeRemaining = 0;
 }
+Window::Window(int timeUntilFirstStudent){
+  CurrentStudent = NULL;
+  m_isHelping = false;
+  m_idleTime = timeUntilFirstStudent;
+  m_timeRemaining = 0;
+}
 Window::~Window(){
   CurrentStudent = NULL;
 }
@@ -24,7 +30,11 @@ void Window::setHelping(bool helping){
 bool Window::isHelping(){
   return m_isHelping;
 }
+int Window::getIdleTime(){
+  return m_idleTime;
+}
 void Window::incrementIdleTime(){
+  cout << "in incrementIdleTime " << endl;
   m_idleTime++;
 }
 void Window::decrementTimeRemaining(){
@@ -34,4 +44,7 @@ void Window::decrementTimeRemaining(){
 void Window::updateWindow(){
   if(m_isHelping) decrementTimeRemaining();
   else incrementIdleTime();
+}
+void Window::addToIdleTime(int timeAmount){
+  m_idleTime += timeAmount;
 }

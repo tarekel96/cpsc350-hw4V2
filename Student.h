@@ -10,7 +10,7 @@ class Student{
     int m_timeLeft;
     int m_timeNeeded;
     int m_timeWaited;
-    bool m_isWaiting;;
+    bool m_isWaiting;
   public:
     Student();
     Student(int timeEntered, int timeNeeded);
@@ -22,6 +22,7 @@ class Student{
     int getTimeNeeded();
     int getTimeWaited();
     int getTimeWaited(int timeLeft);
+    int getTimeEntered();
 
     void setNeeded(int timeNeeded);
     void setWaiting(bool waiting);

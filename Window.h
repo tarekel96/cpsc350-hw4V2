@@ -13,15 +13,18 @@ class Window{
     int m_timeRemaining;
   public:
     Window();
+    Window(int timeUntilFirstStudent);
     ~Window();
 
     void helpStudent(Student* S);
     void stopHelp();
     bool isHelping();
+    int getIdleTime();
 
     void setHelping(bool helping);
     void incrementIdleTime();
     void decrementTimeRemaining();
     void updateWindow();
+    void addToIdleTime(int timeAmount);
 };
 #endif

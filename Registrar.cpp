@@ -7,7 +7,8 @@ Registrar::Registrar(int numberOfWindows, int timeOfDay, GenQueue<int>* studentT
   m_numberOfWindows = numberOfWindows;
   Windows = new Window*[m_numberOfWindows];
   for(int i = 0; i < m_numberOfWindows; ++i){
-    Windows[i] = new Window();
+    // Windows[i] = new Window();
+    Windows[i] = new Window(timeOfDay);
   }
   m_timeOfDay = timeOfDay;
   Line = new GenQueue<Student*>();
@@ -27,12 +28,13 @@ void Registrar::printFields(){
 }
 void Registrar::run(){
   while(!Line->isEmpty()){
-    cout << "Time Of Day: " << m_timeOfDay << endl;
+    cout << "TIME " << m_timeOfDay << endl;
     for(int i = 0; i < m_numberOfWindows; ++i){
       if(Windows[i]->isHelping()) Windows[i]->updateWindow();
     }
 
     bool allWindowsAreFull = true;
+    int temp;
     // iterate through Windows pointer array
     for(int i = 0; i < m_numberOfWindows; ++i){
       // if there is an available window - help next student
@@ -41,6 +43,9 @@ void Registrar::run(){
         // insert wait time to waitTime Queue before removing student from line Queue
         waitTimes->insert(Line->peek()->getTimeWaited(m_timeOfDay));
         //cout << "wait time " << Line->peek()->getTimeWaited(m_timeOfDay) << endl;
+        if(Line->getSize() == 1){
+          temp = Line->peek()->getTimeNeeded();
+        }
         Windows[i]->helpStudent(Line->remove());
       }
     }
@@ -48,18 +53,33 @@ void Registrar::run(){
     if(allWindowsAreFull == false){
       for(int i = 0; i < m_numberOfWindows; ++i){
         if(Windows[i]->isHelping() == false){
-          // increments time idling
-          Windows[i]->updateWindow();
+          if(Line->getSize() == 0){
+            Windows[i]->addToIdleTime(temp);
+          }
+          else {
+            // increments time idling
+            Windows[i]->updateWindow();
+          }
         }
       }
     }
     incrementTimeOfDay();
   }
+  for(int i = 0; i < m_numberOfWindows; ++i){
+    idleTimes->insert(Windows[i]->getIdleTime());
+  }
   printWaitTimes();
+  printIdleTimes();
 }
 void Registrar::printWaitTimes(){
   while(!waitTimes->isEmpty()){
     cout << waitTimes->remove() << " ";
+  }
+  cout << endl;
+}
+void Registrar::printIdleTimes(){
+  while(!idleTimes->isEmpty()){
+    cout << idleTimes->remove() << " ";
   }
   cout << endl;
 }
